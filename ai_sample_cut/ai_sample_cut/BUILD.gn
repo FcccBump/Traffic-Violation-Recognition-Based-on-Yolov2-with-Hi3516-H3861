@@ -1,0 +1,175 @@
+# Copyright (c) 2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/lite/config/component/lite_component.gni")
+lite_component("hi3516dv300_ai_sample") {
+  features = [ ":ohos_camera_ai_demo" ]
+}
+
+need_link_mpp_lib = true
+if (need_link_mpp_lib) {
+  mpp_lib_path = "//device/soc/hisilicon/hi3516dv300/sdk_linux/out"
+}
+
+need_link_opencv_lib = true
+if (need_link_opencv_lib) {
+  opencv_lib_path = "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/ai_sample/third_party"
+}
+
+executable("ohos_camera_ai_demo") {
+  output_name = "ohos_camera_ai_demo"
+  sources = [
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/adp/audio_aac_adp.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/adp/audio_dl_adp.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_audio.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_isp.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_sys.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_vi.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_vo.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_vpss.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common/sample_comm_nnie.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common/sample_comm_svp.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/nnie/sample_nnie_software/sample_svp_nnie_software.c",
+    "ai_infer_process/ai_infer_process.c",
+    "dependency/audio_test.c",
+    "ext_util/base_interface.c",
+    "ext_util/misc_util.c",
+    "ext_util/posix_help.c",
+    "interconnection_server/hisignalling.c",
+    "mpp_help/src/ive_img.c",
+    "mpp_help/src/osd_img.c",
+    "mpp_help/src/vgs_img.c",
+    "scenario/cnn_trash_classify/cnn_trash_classify.c",
+    "scenario/hand_classify/hand_classify.c",
+    "scenario/hand_classify/yolov2_hand_detect.c",
+    "scenario/tennis_detect/tennis_detect.cpp",
+    "smp/sample_ai_main.cpp",
+    "smp/sample_media_ai.c",
+    "smp/sample_media_opencv.cpp",
+    "third_party/src/iniparser/src/dictionary.c",
+    "third_party/src/iniparser/src/iniparser.c",
+  ]
+
+  include_dirs = [
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/include",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/drv/mpp/cbb/include",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/drv/mpp/cbb/init",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/mpp/include",
+    "ai_infer_process",
+    "smp",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/nnie/sample_nnie_software",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/adp/",
+    "scenario/cnn_trash_classify",
+    "scenario/hand_classify",
+    "scenario/tennis_detect",
+    "mpp_help/include",
+    "ext_util",
+    "dependency",
+    "third_party/src/iniparser/src",
+    "third_party/output/opencv/include/opencv4",
+    "//third_party/bounds_checking_function/include",
+    "interconnection_server",
+  ]
+
+  defines = [
+    "SENSOR0_TYPE=SONY_IMX335_MIPI_4M_30FPS_12BIT",
+    "SENSOR1_TYPE=SONY_IMX335_MIPI_4M_30FPS_12BIT",
+  ]
+
+  if (need_link_mpp_lib) {
+    outdir = rebase_path("$mpp_lib_path/lib")
+    ldflags = [ "-L$outdir" ]
+    ldflags += [ "-laaccomm" ]
+    ldflags += [ "-laacdec" ]
+    ldflags += [ "-laacenc" ]
+    ldflags += [ "-laacsbrdec" ]
+    ldflags += [ "-laacsbrenc" ]
+    ldflags += [ "-ldnvqe" ]
+    ldflags += [ "-lhdmi" ]
+    ldflags += [ "-lhi3516cv500_acodec" ]
+    ldflags += [ "-lhi3516cv500_adec" ]
+    ldflags += [ "-lhi3516cv500_aenc" ]
+    ldflags += [ "-lhi3516cv500_aio" ]
+    ldflags += [ "-lhi3516cv500_ai" ]
+    ldflags += [ "-lhi3516cv500_ao" ]
+    ldflags += [ "-lhi3516cv500_base" ]
+    ldflags += [ "-lhi3516cv500_chnl" ]
+    ldflags += [ "-lhi3516cv500_dis" ]
+    ldflags += [ "-lhi3516cv500_gdc" ]
+    ldflags += [ "-lhi3516cv500_h264e" ]
+    ldflags += [ "-lhi3516cv500_h265e" ]
+    ldflags += [ "-lhi3516cv500_isp" ]
+    ldflags += [ "-lhi3516cv500_ive" ]
+    ldflags += [ "-lhi3516cv500_jpegd" ]
+    ldflags += [ "-lhi3516cv500_jpege" ]
+    ldflags += [ "-lhi3516cv500_nnie" ]
+    ldflags += [ "-lhi3516cv500_rc" ]
+    ldflags += [ "-lhi3516cv500_rgn" ]
+    ldflags += [ "-lhi3516cv500_sys" ]
+    ldflags += [ "-lhi3516cv500_vdec" ]
+    ldflags += [ "-lhi3516cv500_vedu" ]
+    ldflags += [ "-lhi3516cv500_venc" ]
+    ldflags += [ "-lhi3516cv500_vfmw" ]
+    ldflags += [ "-lhi3516cv500_vgs" ]
+    ldflags += [ "-lhi3516cv500_vi" ]
+    ldflags += [ "-lhi3516cv500_vo" ]
+    ldflags += [ "-lhi3516cv500_vpss" ]
+    ldflags += [ "-l_hiacs" ]
+    ldflags += [ "-l_hiae" ]
+    ldflags += [ "-l_hiawb_natura" ]
+    ldflags += [ "-l_hiawb" ]
+    ldflags += [ "-l_hicalcflicker" ]
+    ldflags += [ "-l_hidehaze" ]
+    ldflags += [ "-l_hidrc" ]
+    ldflags += [ "-lhifisheyecalibrate" ]
+    ldflags += [ "-l_hiir_auto" ]
+    ldflags += [ "-lhi_irq" ]
+    ldflags += [ "-l_hildci" ]
+    ldflags += [ "-lhi_osal" ]
+    ldflags += [ "-lhi_sensor_i2c" ]
+    ldflags += [ "-lhive_AEC" ]
+    ldflags += [ "-lhive_AGC" ]
+    ldflags += [ "-lhive_ANR" ]
+    ldflags += [ "-lhive_common" ]
+    ldflags += [ "-lhive_EQ" ]
+    ldflags += [ "-lhive_HPF" ]
+    ldflags += [ "-lhive_record" ]
+    ldflags += [ "-lhive_RES_ext" ]
+    ldflags += [ "-lhive_RES" ]
+    ldflags += [ "-lhive_talkv2" ]
+    ldflags += [ "-lhive_wnr" ]
+    ldflags += [ "-lisp" ]
+    ldflags += [ "-live" ]
+    ldflags += [ "-lmd" ]
+    ldflags += [ "-lmpi" ]
+    ldflags += [ "-lmpp_vbs" ]
+    ldflags += [ "-lnnie" ]
+    ldflags += [ "-lsdk" ]
+    ldflags += [ "-lsecurec" ]
+    ldflags += [ "-lsns_imx335" ]
+    ldflags += [ "-ltde" ]
+    ldflags += [ "-lupvqe" ]
+    ldflags += [ "-lvb_server" ]
+    ldflags += [ "-lVoiceEngine" ]
+
+    opencv_lib_dir = rebase_path("$opencv_lib_path/output/opencv/lib")# not affect
+    ldflags += [ "-L$opencv_lib_dir" ]
+    ldflags += [ "-lopencv_world" ]
+    ldflags += [ "-Wl,-rpath=//userdata/lib" ]
+
+    deps = []# initial
+
+  }
+}
